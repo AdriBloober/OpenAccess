@@ -1,0 +1,6 @@
+flask
+flask-restplus
+flask-sqlalchemy
+pyyaml
+pymysql
+Werkzeug==0.16.1
