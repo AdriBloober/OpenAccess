@@ -13,7 +13,7 @@ from resources.errors.authentication_errors import (
     InvalidCredentialsError,
     InvalidSessionError,
     InvalidPasswordLinkError,
-    UserWasNotFoundError,
+    UserWasNotFoundError, AccessDeniedError,
 )
 
 
@@ -36,7 +36,7 @@ def generate_session_token(session_existing_checking=True):
         try:
             get_session_by_token(token)
             continue
-        except NoResultFound:
+        except InvalidSessionError:
             return token
 
 
@@ -74,11 +74,14 @@ def hash_password_algorithm(password, salt=generate_salt()):
 
 
 def login(name, password) -> User:
+    name = name.lower()
     try:
         user = User.query.filter(User.name == name).one()
+
         if user.password == hash_password_algorithm(password, user.salt)[0]:
             return user
         else:
+
             raise InvalidCredentialsError()
     except NoResultFound:
         raise InvalidCredentialsError()
@@ -115,7 +118,13 @@ def get_password_link_by_token(token):
         raise InvalidPasswordLinkError()
 
 
-def perform_password_link(password_link: PasswordLink, new_password) -> User:
+def delete_password_link(password_link):
+    database.remove(password_link)
+
+
+def perform_password_link(password_link: PasswordLink, new_password, user: User) -> User:
+    if password_link.user.id != user.id:
+        raise AccessDeniedError()
     hashed_password, salt = hash_password_algorithm(new_password)
     user = password_link.user
     user.password = hashed_password

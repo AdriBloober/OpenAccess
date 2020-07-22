@@ -20,3 +20,12 @@ session = api.model(
         "user": fields.Nested(user),
     },
 )
+
+password_link = api.model(
+    "Password Link",
+    {
+        "id": fields.Integer(readOnly=True),
+        "token": fields.String(required=True),
+        "user_id": fields.Integer(required=True)
+    }
+)

@@ -10,3 +10,9 @@ login_parser.add_argument("name", type=str, required=True, help="The name of the
 login_parser.add_argument(
     "password", type=str, required=True, help="The password of the user."
 )
+
+password_link_parser = authentication_parser.copy()
+password_link_parser.add_argument("token", type=str, required=True)
+
+password_link_perform = password_link_parser.copy()
+password_link_perform.add_argument("new_password", type=str, required=True)

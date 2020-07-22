@@ -4,7 +4,6 @@ from resources import api
 from resources.api.authentication import namespace
 from resources.api.authentication.api_definition import session
 from resources.api.authentication.domain_logic import (
-    get_session,
     create_session,
     login,
     logout, get_session_by_token,

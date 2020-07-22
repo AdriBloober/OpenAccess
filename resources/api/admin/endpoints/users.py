@@ -36,3 +36,4 @@ class AdminUsersResource(Resource):
         check_admin(get_session(args["OpenAccessToken"]))
 
         delete_user(get_user_by_id(args["user_id"]))
+        return {"status": "success"}

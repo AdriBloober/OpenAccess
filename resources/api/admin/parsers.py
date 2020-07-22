@@ -3,8 +3,36 @@ from flask_restplus import inputs
 from resources.api.authentication.parsers import authentication_parser
 
 user_target_parser = authentication_parser.copy()
-user_target_parser.add_argument("user_id", type=int, required=True, help="The id of the targeted user.")
+user_target_parser.add_argument(
+    "user_id", type=int, required=True, help="The id of the targeted user."
+)
 
 user_creation_parser = authentication_parser.copy()
-user_creation_parser.add_argument("name", type=str, required=True, help="The name of the user.")
-user_creation_parser.add_argument("admin", type=inputs.boolean, required=True, default=False, help="The name of the user.")
+user_creation_parser.add_argument(
+    "name", type=str, required=True, help="The name of the user."
+)
+user_creation_parser.add_argument(
+    "admin",
+    type=inputs.boolean,
+    required=True,
+    default=False,
+    help="The name of the user.",
+)
+
+site_creation_parser = authentication_parser.copy()
+site_creation_parser.add_argument("name", type=str, required=True)
+site_creation_parser.add_argument(
+    "host", type=str, required=True, help="The hostname for this site/domain."
+)
+site_creation_parser.add_argument(
+    "proxy_pass_url",
+    type=str,
+    required=True,
+    help="The server will send the requst to this url.",
+)
+
+site_target_parser = authentication_parser.copy()
+site_target_parser.add_argument("site_id", type=int, required=True)
+
+site_target_user_parser = user_target_parser.copy()
+site_target_user_parser.add_argument("site_id", type=int, required=True)
