@@ -25,7 +25,7 @@ class DatabaseConnectionConfig(ConfigObject):
 # Flask Configuration object
 class FlaskConfig(ConfigObject):
     __ignored_attributes__ = ["SQLALCHEMY_DATABASE_URI"]
-    FLASK_ENVIRONMENT = "development"
+    FLASK_ENVIRONMENT = "production"
     DEBUG = False
     TESTING = False
     DATABASE: DatabaseConnectionConfig = DatabaseConnectionConfig()
