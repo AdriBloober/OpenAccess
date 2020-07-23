@@ -5,3 +5,4 @@ pyyaml
 pymysql
 Werkzeug==0.16.1
 requests
+cryptography

@@ -26,8 +26,8 @@ class AccessDeniedError(AuthenticationError):
 class InvalidSessionError(AuthenticationError):
     name = "invalid_session_error"
     description = (
-        "The session is invalid or expired. You must reauthenticate you to perform this action with a new "
-        "session. "
+            "The session is invalid or expired. You must reauthenticate you to perform this action with a new "
+            "session. "
     )
     http_response = 401
 

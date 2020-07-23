@@ -49,6 +49,7 @@ def get_config_object_from_json(c, o, prefixes=None):
             setattr(c, k, v)
         elif getattr(c, k) == REQUIRED_ARGUMENT:
             raise ArgumentIsRequiredError(k)
+    c.__init__()
     return c
 
 

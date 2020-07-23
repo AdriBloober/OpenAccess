@@ -1,0 +1,25 @@
+version: "3"
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: access
+      MYSQL_USER: access
+      MYSQL_PASSWORD: access
+    volumes:
+    - db:/var/lib/mysql
+  open_access:
+    tty: true
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+    - 80:80
+    environment:
+      HTTP_DATABASE_DB: access
+      HTTP_DATABASE_USER: access
+      HTTP_DATABASE_PASSWORD: access
+      HTTP_DATABASE_HOST: db

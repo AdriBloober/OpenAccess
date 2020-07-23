@@ -41,9 +41,11 @@ class TokenGeneratingConfig(ConfigObject):
     CHARSET = string.ascii_letters + "1234567890"
     LENGTH = 35
 
+
 class SaltGeneratingConfig(ConfigObject):
     CHARSET = string.ascii_letters + "1234567890"
     LENGTH = 30
+
 
 class AuthenticationConfig(ConfigObject):
     TOKEN_GENERATING_CONFIG: TokenGeneratingConfig = TokenGeneratingConfig()
