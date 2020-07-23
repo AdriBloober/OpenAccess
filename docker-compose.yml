@@ -23,3 +23,5 @@ services:
       HTTP_DATABASE_USER: access
       HTTP_DATABASE_PASSWORD: access
       HTTP_DATABASE_HOST: db
+volumes:
+  db:
