@@ -2,7 +2,10 @@ from flask_restplus import reqparse
 
 authentication_parser = reqparse.RequestParser()
 authentication_parser.add_argument(
-    "OpenAccessToken", type=str, required=True, location=("cookies", "headers", "values", "json")
+    "OpenAccessToken",
+    type=str,
+    required=True,
+    location=("cookies", "headers", "values", "json"),
 )
 
 login_parser = reqparse.RequestParser()
@@ -16,3 +19,7 @@ password_link_parser.add_argument("token", type=str, required=True)
 
 password_link_perform = password_link_parser.copy()
 password_link_perform.add_argument("new_password", type=str, required=True)
+
+password_change_parser = authentication_parser.copy()
+password_change_parser.add_argument("current_password", type=str, required=False)
+password_change_parser.add_argument("new_password", type=str, required=True)

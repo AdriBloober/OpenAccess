@@ -13,7 +13,8 @@ from resources.errors.authentication_errors import (
     InvalidCredentialsError,
     InvalidSessionError,
     InvalidPasswordLinkError,
-    UserWasNotFoundError, AccessDeniedError,
+    UserWasNotFoundError,
+    AccessDeniedError,
 )
 
 
@@ -65,6 +66,8 @@ def create_user(name, admin=False):
 
 
 def hash_password_algorithm(password, salt=generate_salt()):
+    if password is None:
+        password = ""
     h = hmac.new(
         salt.encode("utf-8"),
         password.encode("utf-8"),
@@ -122,7 +125,9 @@ def delete_password_link(password_link):
     database.remove(password_link)
 
 
-def perform_password_link(password_link: PasswordLink, new_password, user: User) -> User:
+def perform_password_link(
+    password_link: PasswordLink, new_password, user: User
+) -> User:
     if password_link.user.id != user.id:
         raise AccessDeniedError()
     hashed_password, salt = hash_password_algorithm(new_password)
@@ -144,6 +149,24 @@ def get_user_by_id(target_user_id: int):
         raise UserWasNotFoundError()
 
 
-# TODO : Delete user from sites
 def delete_user(target_user: User):
     database.remove(target_user)
+
+
+def delete_all_sessions(user: User):
+    try:
+        for session in Session.query.filter(Session.user_id == user.id).all():
+            database.remove(session, commit=False)
+        database.db.session.commit()
+    except NoResultFound:
+        pass
+
+
+def change_password(user: User, current_password, new_password):
+    if hash_password_algorithm(current_password, salt=user.salt)[0] == user.password or user.password is None:
+        hashed_password, salt = hash_password_algorithm(new_password)
+        user.password = hashed_password
+        user.salt = salt
+        database.db.session.commit()
+    else:
+        raise AccessDeniedError()

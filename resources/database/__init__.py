@@ -11,11 +11,13 @@ def setup():
     db.create_all()
 
 
-def add(obj):
+def add(obj, commit=True):
     db.session.add(obj)
-    db.session.commit()
+    if commit:
+        db.session.commit()
 
 
-def remove(obj):
+def remove(obj, commit=True):
     db.session.delete(obj)
-    db.session.commit()
+    if commit:
+        db.session.commit()
