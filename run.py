@@ -18,8 +18,7 @@ class DeployProductionWithDeployingServiceError(Exception):
         )
 
 
-if config.HTTP.FLASK_ENVIRONMENT != "development":
-    raise DeployProductionWithDeployingServiceError()
+config.HTTP.FLASK_ENVIRONMENT = "development"
 logging.warning(
     "This is a development server: Use Gunicorn or other deploying services for deploying!"
 )
