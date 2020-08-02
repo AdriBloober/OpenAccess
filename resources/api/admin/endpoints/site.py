@@ -11,11 +11,13 @@ from resources.api.admin.domain_logic import (
     add_user_to_site,
     remove_user_from_site,
     change_users_site,
+    update_site_values,
 )
 from resources.api.admin.parsers import (
     site_creation_parser,
     site_target_parser,
     site_user_update_parser,
+    site_changing_parser,
 )
 from resources.api.authentication.domain_logic import get_session, get_user_by_id
 
@@ -42,6 +44,17 @@ class SitesResources(Resource):
         check_admin(get_session(args["OpenAccessToken"]))
         delete_site(get_site_by_id(args["site_id"]))
         return {"status": "success"}
+
+    @api.expect(site_changing_parser)
+    @api.marshal_with(site_with_users)
+    def put(self):
+        args = site_changing_parser.parse_args()
+        check_admin(get_session(args["OpenAccessToken"]))
+        site = get_site_by_id(args["site_id"])
+        update_site_values(
+            site, host=args["host"], proxy_pass_url=args["proxy_pass_url"]
+        )
+        return site
 
 
 @namespace.route("/site/users")

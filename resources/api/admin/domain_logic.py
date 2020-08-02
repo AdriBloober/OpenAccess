@@ -85,3 +85,11 @@ def change_users_site(site: Site, list_of_uuids: List[int]):
     for uuid in list_of_uuids:
         site.users.append(get_user_by_id(uuid))
     database.db.session.commit()
+
+
+def update_site_values(site, host=None, proxy_pass_url=None):
+    if host:
+        site.host = host
+    if proxy_pass_url:
+        site.proxy_pass_url = proxy_pass_url
+    database.db.session.commit()

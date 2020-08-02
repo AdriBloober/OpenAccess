@@ -34,5 +34,16 @@ site_creation_parser.add_argument(
 site_target_parser = authentication_parser.copy()
 site_target_parser.add_argument("site_id", type=int, required=True)
 
+site_changing_parser = site_target_parser.copy()
+site_changing_parser.add_argument(
+    "host", type=str, required=False, help="The hostname for this site/domain."
+)
+site_changing_parser.add_argument(
+    "proxy_pass_url",
+    type=str,
+    required=False,
+    help="The server will send the requst to this url.",
+)
+
 site_user_update_parser = site_target_parser.copy()
 site_user_update_parser.add_argument("uuids", action="append", default=[], type=int)
