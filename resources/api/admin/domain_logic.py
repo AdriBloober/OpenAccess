@@ -88,7 +88,8 @@ def change_users_site(site: Site, list_of_uuids: List[int]):
 
 
 def update_site_values(site, host=None, proxy_pass_url=None):
-    if host:
+    if host and site.host != host:
+        check_site_host_exists(host)
         site.host = host
     if proxy_pass_url:
         site.proxy_pass_url = proxy_pass_url
