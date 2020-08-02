@@ -34,5 +34,5 @@ site_creation_parser.add_argument(
 site_target_parser = authentication_parser.copy()
 site_target_parser.add_argument("site_id", type=int, required=True)
 
-site_target_user_parser = user_target_parser.copy()
-site_target_user_parser.add_argument("site_id", type=int, required=True)
+site_user_update_parser = site_target_parser.copy()
+site_user_update_parser.add_argument("uuids", action="append", default=[], type=int)

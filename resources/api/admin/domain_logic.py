@@ -1,6 +1,10 @@
+from copy import deepcopy
+from typing import List
+
 from sqlalchemy.orm.exc import NoResultFound
 
 from resources import database
+from resources.api.authentication.domain_logic import get_user_by_id
 from resources.database.dtos.site import Site
 from resources.database.dtos.user import User
 from resources.errors.admin_errors import (
@@ -69,3 +73,15 @@ def remove_user_from_site(site, user):
         database.db.session.commit()
     except ValueError:
         pass
+
+
+def change_users_site(site: Site, list_of_uuids: List[int]):
+    list_of_uuids = deepcopy(list_of_uuids)
+    for user in site.users:
+        if user.id not in list_of_uuids:
+            site.users.remove(user)
+        else:
+            list_of_uuids.remove(user.id)
+    for uuid in list_of_uuids:
+        site.users.append(get_user_by_id(uuid))
+    database.db.session.commit()

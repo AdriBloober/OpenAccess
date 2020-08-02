@@ -10,11 +10,13 @@ from resources.api.admin.domain_logic import (
     delete_site,
     add_user_to_site,
     remove_user_from_site,
+    change_users_site,
 )
 from resources.api.admin.parsers import (
     site_creation_parser,
     site_target_parser,
     site_target_user_parser,
+    site_user_update_parser,
 )
 from resources.api.authentication.domain_logic import get_session, get_user_by_id
 
@@ -43,22 +45,13 @@ class SitesResources(Resource):
         return {"status": "success"}
 
 
-@namespace.route("/site/user")
+@namespace.route("/site/users")
 class SiteUserResource(Resource):
     @api.marshal_with(site_with_users)
-    @api.expect(site_target_user_parser)
-    def post(self):
-        args = site_target_user_parser.parse_args()
+    @api.expect(site_user_update_parser)
+    def put(self):
+        args = site_user_update_parser.parse_args()
         check_admin(get_session(args["OpenAccessToken"]))
         site = get_site_by_id(args["site_id"])
-        add_user_to_site(site, get_user_by_id(args["user_id"]))
-        return site
-
-    @api.marshal_with(site_with_users)
-    @api.expect(site_target_user_parser)
-    def delete(self):
-        args = site_target_user_parser.parse_args()
-        check_admin(get_session(args["OpenAccessToken"]))
-        site = get_site_by_id(args["site_id"])
-        remove_user_from_site(site, get_user_by_id(args["user_id"]))
+        change_users_site(site, args["uuids"])
         return site
