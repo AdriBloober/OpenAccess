@@ -9,7 +9,7 @@ class AuthenticationError(OpenAccessError):
 
 class UsernameAlreadyExistsError(AuthenticationError):
     name = "username_already_exists_error"
-    description = "The username already exists"
+    description = "The username already exists."
     http_response = 400
 
 
@@ -39,6 +39,6 @@ class InvalidPasswordLinkError(AuthenticationError):
 
 
 class UserWasNotFoundError(AuthenticationError):
-    name = "user_was_not_found"
+    name = "user_was_not_found_error"
     description = "The target user was not found."
     http_response = 404
