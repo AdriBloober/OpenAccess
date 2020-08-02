@@ -15,7 +15,6 @@ from resources.api.admin.domain_logic import (
 from resources.api.admin.parsers import (
     site_creation_parser,
     site_target_parser,
-    site_target_user_parser,
     site_user_update_parser,
 )
 from resources.api.authentication.domain_logic import get_session, get_user_by_id
