@@ -22,7 +22,7 @@ def parse_header_content(content) -> str:
     return content
 
 
-@app.route("/<path:path>")
+@app.route("/<path:path>", methods=["GET", "POST", "DELETE", "PUT"])
 def proxy_route(path):
     try:
         token = ""
@@ -58,6 +58,6 @@ def proxy_route(path):
         abort(403)
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST", "DELETE", "PUT"])
 def proxy_route_index():
     return proxy_route("")
