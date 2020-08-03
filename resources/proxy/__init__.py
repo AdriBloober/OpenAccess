@@ -25,11 +25,12 @@ def parse_header_content(content) -> str:
 @app.route("/<path:path>", methods=["GET", "POST", "DELETE", "PUT"])
 def proxy_route(path):
     try:
-        token = ""
         if "OpenAccessToken" in request.cookies:
             token = request.cookies["OpenAccessToken"]
         elif "OpenAccessToken" in request.headers:
             token = request.headers["OpenAccessToken"]
+        else:
+            raise InvalidSessionError()
         user = get_session(token)
         site = Site.query.filter(Site.host == request.host.lower()).one()
         if not (user in site.users or check_admin(user, raise_error=False)):
