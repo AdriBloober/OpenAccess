@@ -6,7 +6,7 @@ db = SQLAlchemy(app)
 
 
 def setup():
-    from resources.database.dtos import site_user_link, user, site, session, password_link
+    from resources.database.dtos import site_user_link, user, site, session, password_link, site_custom_header
 
     db.create_all()
 

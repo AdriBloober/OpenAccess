@@ -47,3 +47,14 @@ site_changing_parser.add_argument(
 
 site_user_update_parser = site_target_parser.copy()
 site_user_update_parser.add_argument("uuids", action="append", default=[], type=int)
+
+custom_header_target_parser = authentication_parser.copy()
+custom_header_target_parser.add_argument("custom_header_id", type=int, required=True)
+
+create_custom_header_parser = site_target_parser.copy()
+create_custom_header_parser.add_argument("header_name", required=True)
+create_custom_header_parser.add_argument("header_content", required=True)
+
+change_custom_header_parser = create_custom_header_parser.copy()
+change_custom_header_parser.add_argument("custom_header_id", type=int, required=True)
+change_custom_header_parser.remove_argument("site_id")

@@ -21,3 +21,9 @@ class SiteWasNotFoundError(AdminError):
     name = "site_was_not_found_error"
     description = "The requested site was not found and does not exists."
     http_response = 404
+
+
+class HeaderWasNotFoundError(AdminError):
+    name = "header_was_not_found_error"
+    description = "The requested header was not found and does not exists."
+    http_response = 404

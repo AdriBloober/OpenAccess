@@ -6,11 +6,13 @@ from sqlalchemy.orm.exc import NoResultFound
 from resources import database
 from resources.api.authentication.domain_logic import get_user_by_id
 from resources.database.dtos.site import Site
+from resources.database.dtos.site_custom_header import SiteCustomHeader
 from resources.database.dtos.user import User
 from resources.errors.admin_errors import (
     SiteNameAlreadyExistsError,
     SiteHostAlreadyExistsError,
     SiteWasNotFoundError,
+    HeaderWasNotFoundError,
 )
 from resources.errors.authentication_errors import AccessDeniedError
 
@@ -54,7 +56,9 @@ def create_site(name, host, proxy_pass_url) -> Site:
     check_site_name_exists(name)
     check_site_host_exists(host)
     site = Site(name, host, proxy_pass_url)
-    database.add(site)
+    database.add(site, commit=False)
+    create_custom_header(site, "X-Real-Ip", "request.remote_addr")
+    database.db.session.commit()
     return site
 
 
@@ -95,3 +99,31 @@ def update_site_values(site, host=None, proxy_pass_url=None):
     if proxy_pass_url:
         site.proxy_pass_url = proxy_pass_url
     database.db.session.commit()
+
+
+def create_custom_header(site, name, value):
+    header = SiteCustomHeader(name, value, site)
+    database.add(header)
+    return header
+
+
+def change_custom_header(header, name=None, value=None) -> SiteCustomHeader:
+    if name:
+        header.header_name = name
+    if value:
+        header.header_content = value
+    database.db.session.commit()
+    return header
+
+
+def get_header_by_id(header_id: int):
+    try:
+        return SiteCustomHeader.query.filter(SiteCustomHeader.id == header_id).one()
+    except NoResultFound:
+        raise HeaderWasNotFoundError()
+
+
+def remove_header(header: SiteCustomHeader):
+    if header.site:
+        header.site.custom_headers.remove(header)
+    database.remove(header)

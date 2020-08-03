@@ -12,6 +12,16 @@ from resources.errors.authentication_errors import InvalidSessionError
 from resources.proxy.proxy_error import SiteWasNotFound
 
 
+def parse_header_content(content) -> str:
+    if content is None:
+        return ""
+    if type(content) in (int, float):
+        return str(content)
+    if content.lower().startswith("request."):
+        return getattr(request, "request.asdf".join(content.split("request.")[1:]))
+    return content
+
+
 @app.route("/<path:path>")
 def proxy_route(path):
     try:
@@ -25,11 +35,15 @@ def proxy_route(path):
         if not (user in site.users or check_admin(user, raise_error=False)):
             raise InvalidSessionError()
         h = dict(request.headers)
-        h["X-Real-Ip"] = request.remote_addr
+
+        for custom_header in site.custom_headers:
+            h[custom_header.header_name] = parse_header_content(
+                custom_header.header_content
+            )
         req = requests.request(
             request.method,
             f"{site.proxy_pass_url}/{path}",
-            headers=request.headers,
+            headers=h,
             cookies=request.cookies,
             data=request.data,
             auth=request.authorization,

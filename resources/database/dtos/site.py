@@ -7,6 +7,7 @@ class Site(db.Model):
     host = db.Column(db.Text, nullable=False)
     proxy_pass_url = db.Column(db.Text, nullable=False)
     users = db.relationship("User", secondary="site_user_link", back_populates="sites")
+    custom_headers = db.relationship("SiteCustomHeader", back_populates="site")
 
     def __init__(self, name, host, proxy_pass_url):
         self.name = name
