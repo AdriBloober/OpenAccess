@@ -55,7 +55,7 @@ create_custom_header_parser = site_target_parser.copy()
 create_custom_header_parser.add_argument("header_name", required=True)
 create_custom_header_parser.add_argument("header_content", required=True)
 
-change_custom_header_parser = site_target_parser.copy()
+change_custom_header_parser = authentication_parser.copy()
 change_custom_header_parser.add_argument("custom_header_id", type=int, required=True)
 change_custom_header_parser.add_argument("header_name", required=False)
 change_custom_header_parser.add_argument("header_content", required=False)
