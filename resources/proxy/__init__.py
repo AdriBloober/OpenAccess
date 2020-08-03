@@ -46,6 +46,7 @@ def proxy_route(path):
             headers=h,
             cookies=request.cookies,
             data=request.data,
+            params=request.args,
             auth=request.authorization,
         )
         resp = Response(req.content, req.status_code, dict(req.headers))
